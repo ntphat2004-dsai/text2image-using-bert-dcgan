@@ -30,12 +30,14 @@ def extract_file(path):
 def load_captions(captions_folder, images_folder):
     captions = {}
     for fname in os.listdir(captions_folder):
-        with open(os.path.join(captions_folder, fname)) as f:
+        with open(os.path.join(captions_folder, fname), encoding='utf-8') as f:
             lines = f.read().strip().split('\n')
-        image_file = fname.replace(".txt", ".jpg")
+        base_name = os.path.splitext(fname)[0]
+        image_file = base_name + ".jpg"
         if os.path.exists(os.path.join(images_folder, image_file)):
             captions[image_file] = lines
     return captions
+
 
 def save_model(model, path):
     torch.save(model.state_dict(), path)
