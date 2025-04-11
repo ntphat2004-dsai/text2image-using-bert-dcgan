@@ -4,10 +4,13 @@ from config import *
 from model.dcgan import Generator
 from model.text_encoder import get_embed_model
 from utils import show_grid
-import glob
 import os
 
-def generate_image(text_embedding, generator):
+def generate_image(input_text, generator):
+    generator.eval()
+    embed_model = get_embed_model()
+    text_embedding = torch.tensor(embed_model.encode(input_text))
+    text_embedding = text_embedding.unsqueeze(0).to(DEVICE)
     noise = torch.randn(1, NOISE_DIM, device=DEVICE)
 
     with torch.inference_mode():
@@ -18,8 +21,6 @@ def generate_image(text_embedding, generator):
 
 
 def main():
-    embed_model = get_embed_model()
-
     generator = Generator(
         noise_dim=NOISE_DIM, 
         feature_dim=128, 
@@ -29,18 +30,11 @@ def main():
     ).to(DEVICE)
 
     path = os.path.join(SAVE_MODEL_PATH, 'generator.pth')
-    if not os.path.exists(path):
-        print("Model file not found. Please train the model first.")
-        return
-    print(f"Loading model from {path}...")
-    state_dict = torch.load(path, map_location=DEVICE)
-    generator.load_state_dict(state_dict)
 
-    input_caption = input('Enter a caption: ') # Example: "this flower is white and purple in color, with petals that are pointed at the ends."
-    text_embedding = torch.tensor(embed_model.encode(input_caption))
-    text_embedding = text_embedding.unsqueeze(0).to(DEVICE)
+    generator = load_model(generator, path)
 
-    generate_image(text_embedding, generator)
+    input_text = input('Enter a caption: ') # Example: "this flower is white and purple in color, with petals that are pointed at the ends."
+    generate_image(input_text)
     
 if __name__ == "__main__":
     main()

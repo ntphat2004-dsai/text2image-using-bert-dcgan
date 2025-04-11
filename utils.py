@@ -48,6 +48,15 @@ def save_model(model, path):
     torch.save(model.state_dict(), file_path)
     print(f'Model saved to {file_path}')
 
+def load_model(model, path):
+    if not os.path.exists(path):
+        print("Model file not found. Please train the model first.")
+    return
+    
+    print(f"Loading model from {path}...")
+    state_dict = torch.load(path, map_location=DEVICE)
+    model.load_state_dict(state_dict)
+
 def show_grid(image):
   grid = make_grid(image.cpu(), normalize=True)
   plt.figure(figsize=(5, 5))
