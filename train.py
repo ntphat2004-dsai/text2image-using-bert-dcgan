@@ -11,6 +11,31 @@ from config import *
 from tqdm import tqdm
 
 def train(generator, discriminator, dataloader, gen_optimizer, dis_optimizer, bce_loss, l2_loss, l1_loss):
+    """
+    Trains a GAN model consisting of a generator and a discriminator using the provided dataloader and optimizers.
+    Args:
+        generator (torch.nn.Module): The generator model responsible for creating fake images.
+        discriminator (torch.nn.Module): The discriminator model responsible for distinguishing real and fake images.
+        dataloader (torch.utils.data.DataLoader): DataLoader providing batches of real images, wrong images, and embedded captions.
+        gen_optimizer (torch.optim.Optimizer): Optimizer for the generator.
+        dis_optimizer (torch.optim.Optimizer): Optimizer for the discriminator.
+        bce_loss (torch.nn.Module): Binary Cross-Entropy loss function for adversarial training.
+        l2_loss (torch.nn.Module): L2 loss function for feature similarity between real and fake images.
+        l1_loss (torch.nn.Module): L1 loss function for pixel-wise reconstruction between real and fake images.
+    Training Process:
+        - The discriminator is trained to distinguish between real, fake, and wrong images using BCE loss.
+        - The generator is trained to:
+            1. Fool the discriminator (adversarial loss).
+            2. Generate images with similar features to real images (feature similarity loss).
+            3. Reconstruct images close to real ones (pixel-wise reconstruction loss).
+        - Losses are logged per epoch, and the model is saved after training.
+    Returns:
+        None: The function trains the models in-place and saves the generator to the specified path.
+    Notes:
+        - The generator loss combines adversarial loss, feature similarity loss (scaled by 100), and pixel-wise loss (scaled by 50).
+        - The discriminator loss includes real image loss, fake image loss, and contrastive loss for wrong images.
+        - Training progress is logged every 10 epochs or at the final epoch.
+    """
     for epoch in tqdm(range(NUM_EPOCHS)):
         dis_losses, gen_losses = [], []
         start_time = time.time()

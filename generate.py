@@ -5,6 +5,8 @@ from model.dcgan import Generator
 from model.text_encoder import get_embed_model
 from utils import show_grid, load_model
 import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 def generate_image(input_text, generator):
     generator.eval()
@@ -17,7 +19,11 @@ def generate_image(input_text, generator):
         generated_image = generator(noise, text_embedding)
 
     grid = torchvision.utils.make_grid(generated_image.cpu(), normalize=True)
-    show_grid(grid)
+    # show_grid(grid)
+    # Show image
+    plt.imshow(np.transpose(grid.numpy(), (1, 2, 0)))
+    plt.axis('off')
+    plt.show()
 
 
 def main():
