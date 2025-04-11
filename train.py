@@ -102,7 +102,6 @@ def main():
         transforms.Normalize([0.5], ([0.5]))
     ])
 
-
     dataset = CustomDataset(
         image_dir=images_folder,
         captions_dict=encoded_captions,
@@ -129,3 +128,6 @@ def main():
 
 
     train(generator, discriminator, dataloader, gen_optimizer, dis_optimizer, bce_loss, l2_loss, l1_loss)
+
+if __name__ == "__main__":
+    main()
