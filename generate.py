@@ -3,7 +3,7 @@ import torchvision
 from config import *
 from model.dcgan import Generator
 from model.text_encoder import get_embed_model
-from utils import show_grid
+from utils import show_grid, load_model
 import os
 
 def generate_image(input_text, generator):
@@ -34,7 +34,7 @@ def main():
     generator = load_model(generator, path)
 
     input_text = input('Enter a caption: ') # Example: "this flower is white and purple in color, with petals that are pointed at the ends."
-    generate_image(input_text)
+    generate_image(input_text, generator)
     
 if __name__ == "__main__":
     main()

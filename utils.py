@@ -5,6 +5,8 @@ import gdown
 import matplotlib.pyplot as plt
 from torchvision.utils import make_grid
 import numpy as np
+import torch
+from config import DEVICE
 
 def download_file(url):
     output = None
@@ -51,11 +53,13 @@ def save_model(model, path):
 def load_model(model, path):
     if not os.path.exists(path):
         print("Model file not found. Please train the model first.")
-    return
+        return None
     
     print(f"Loading model from {path}...")
     state_dict = torch.load(path, map_location=DEVICE)
     model.load_state_dict(state_dict)
+
+    return model
 
 def show_grid(image):
   grid = make_grid(image.cpu(), normalize=True)
