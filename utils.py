@@ -42,8 +42,11 @@ def load_captions(captions_folder, images_folder):
   return captions
 
 def save_model(model, path):
-    torch.save(model.state_dict(), path)
-    print(f'Model saved to {path}')
+    if not os.path.exists(path):
+        os.makedirs(path)
+    file_path = os.path.join(path, 'generator.pth')
+    torch.save(model.state_dict(), file_path)
+    print(f'Model saved to {file_path}')
 
 def show_grid(image):
   grid = make_grid(image.cpu(), normalize=True)

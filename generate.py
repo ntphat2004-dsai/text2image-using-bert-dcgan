@@ -7,16 +7,6 @@ from utils import show_grid
 import glob
 import os
 
-
-def get_latest_weight_file(directory, extension="*.pth"):
-
-    weight_files = glob.glob(os.path.join(directory, extension))
-    if not weight_files:
-        raise FileNotFoundError(f"No weight files with extension {extension} found in {directory}")
-
-    latest_file = max(weight_files, key=os.path.getctime)
-    return latest_file
-
 def generate_image(text_embedding, generator):
     noise = torch.randn(1, NOISE_DIM, device=DEVICE)
 
@@ -38,10 +28,12 @@ def main():
         reduced_dim_size=256
     ).to(DEVICE)
 
-
-    weight_path = get_latest_weight_file(SAVE_MODEL_PATH)
-    print(f"Loading generator weights from: {weight_path}")
-    state_dict = torch.load(weight_path, map_location=DEVICE)
+    path = os.path.join(SAVE_MODEL_PATH, 'generator.pth')
+    if not os.path.exists(path):
+        print("Model file not found. Please train the model first.")
+        return
+    print(f"Loading model from {path}...")
+    state_dict = torch.load(path, map_location=DEVICE)
     generator.load_state_dict(state_dict)
 
     input_caption = input('Enter a caption: ') # Example: "this flower is white and purple in color, with petals that are pointed at the ends."
