@@ -92,7 +92,9 @@ def train(generator, discriminator, dataloader, gen_optimizer, dis_optimizer, bc
 def main():
     torch.manual_seed(42)
     
-    encoded_captions = load_captions(CAPTIONS_PATH)
+    captions_folder = os.path.normpath(CAPTIONS_PATH)
+    images_folder = os.path.normpath(IMAGES_PATH)
+    encoded_captions = load_captions(captions_folder, images_folder)
 
     transform = transforms.Compose([
         transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
@@ -102,7 +104,7 @@ def main():
 
 
     dataset = CustomDataset(
-        image_dir=IMAGES_PATH,
+        image_dir=images_folder,
         captions_dict=encoded_captions,
         transform=transform
     )
