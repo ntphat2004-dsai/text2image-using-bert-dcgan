@@ -28,15 +28,18 @@ def extract_file(path):
         print("Download failed. File not found!")
 
 def load_captions(captions_folder, images_folder):
-    captions = {}
-    for fname in os.listdir(captions_folder):
-        with open(os.path.join(captions_folder, fname), encoding='utf-8') as f:
-            lines = f.read().strip().split('\n')
-        base_name = os.path.splitext(fname)[0]
-        image_file = base_name + ".jpg"
-        if os.path.exists(os.path.join(images_folder, image_file)):
-            captions[image_file] = lines
-    return captions
+  captions = {}
+  image_files = os.listdir(images_folder)
+
+  for image_file in image_files:
+    image_name = image_file.split('.')[0]
+    caption_file = os.path.join(captions_folder, image_name + '.txt')
+    with open(caption_file, 'r') as f:
+      caption = f.readlines()[0].strip()
+      if image_name not in captions:
+        captions[image_name] = caption
+
+  return captions
 
 
 def save_model(model, path):
