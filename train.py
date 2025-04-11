@@ -2,6 +2,7 @@ import time
 import torch
 import torch.nn as nn
 from model.dcgan import Generator, Discriminator
+from model.text_encoder import encode_caption
 from dataset import CustomDataset
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -95,8 +96,8 @@ def main():
     
     captions_folder = os.path.normpath(CAPTIONS_PATH)
     images_folder = os.path.normpath(IMAGES_PATH)
-    encoded_captions = load_captions(captions_folder, images_folder)
-
+    captions = load_captions(captions_folder, images_folder)
+    encoded_captions = encode_caption(captions)
     transform = transforms.Compose([
         transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
         transforms.ToTensor(),
