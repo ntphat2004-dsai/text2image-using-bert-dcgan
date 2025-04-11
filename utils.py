@@ -60,10 +60,10 @@ def load_model(model, path):
     model.load_state_dict(state_dict)
 
     return model
-
+    
 def show_grid(image):
   grid = make_grid(image.cpu(), normalize=True)
   plt.figure(figsize=(5, 5))
   plt.imshow(np.transpose(grid.numpy(), (1, 2, 0)))
-  plt.axis(False)
+  plt.axis('off')
   plt.show()
