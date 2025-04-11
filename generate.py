@@ -21,9 +21,14 @@ def generate_image(input_text, generator):
     grid = torchvision.utils.make_grid(generated_image.cpu(), normalize=True)
     # show_grid(grid)
     # Show image
+    plt.figure(figsize=(5, 5))
     plt.imshow(np.transpose(grid.numpy(), (1, 2, 0)))
-    plt.axis('off')
-    plt.show()
+    plt.tight_layout()
+    plt.savefig(SAVE_IMAGE_PATH, bbox_inches='tight', pad_inches=0)
+    plt.close()  # Close the plot to free memory
+    print("Image generated successfully!")
+    print(f"Image saved to: {SAVE_IMAGE_PATH}")
+    print("Image saved successfully! Please, check the image in the specified path.")
 
 
 def main():
