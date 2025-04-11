@@ -12,7 +12,7 @@ def download_file(url):
         print(f'Downloading file from url: {url}')
         output = gdown.download(url, quiet=False, fuzzy=True)
         print(f'Downloaded to: {output}')
-        print(f'Files in dir: {os.listdir("cvpr2016_flowers")}')
+        print(f'Files in dir: {os.listdir(output)}')
 
     except Exception as error:
         print(f'Got an error: {error}')

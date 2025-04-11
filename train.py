@@ -8,6 +8,7 @@ from torchvision import transforms
 from utils import *
 from config import *    
 from tqdm import tqdm
+
 def train(generator, discriminator, dataloader, gen_optimizer, dis_optimizer, bce_loss, l2_loss, l1_loss):
     for epoch in tqdm(range(NUM_EPOCHS)):
         dis_losses, gen_losses = [], []
